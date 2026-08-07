@@ -50,7 +50,3 @@ skills/
   sdd-execute/   execution loop, TDD-lite, debugging, completion
                  + reviewer.md (optional final-review subagent prompt)
 ```
-
-## License
-
-MIT
