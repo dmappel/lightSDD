@@ -4,15 +4,17 @@ Lightweight spec-driven development for Claude Code. A minimal alternative to he
 
 ## Core idea
 
-**Process depth is proportional to the task.** Instead of one mandatory full pipeline for everything, three tiers:
+**Process depth is proportional to the risk of the task** — not to its size. Instead of one mandatory full pipeline for everything, three tiers:
 
 | Tier | Fits | Process |
 |------|------|---------|
-| **quick** | typo, config tweak, trivial fix | No artifacts. Do it, verify. |
-| **std** | small feature/bugfix, ~1–3 files | Inline mini-spec (5–7 bullets), one "OK", implement. |
-| **full** | multi-task feature, risky refactor | One feature doc = spec + plan + progress ledger in a single file, one approval, implement task by task. |
+| **quick** | obvious, low-risk, reversible; no real design decision | No artifacts. Do it, verify. |
+| **std** | bounded feature/bugfix, design is clear, blast radius contained | Inline mini-spec (5–7 bullets), one "OK", implement. |
+| **full** | cross-cutting feature, unclear design, risky refactor, or a change to contracts / data / security / concurrency | One feature doc = spec + plan + progress ledger in a single file, one approval, implement task by task. |
 
-Claude proposes the tier; you confirm with one word (quick needs no confirmation). If a task grows mid-flight, Claude says so and proposes the next tier up instead of pushing through.
+Tier follows design uncertainty, blast radius, reversibility and risk; file count is only a weak signal — one auth change can be `full`, five config edits can be `quick`.
+
+Claude proposes the tier; you confirm with one word (quick needs no confirmation). Mid-flight it moves either way: escalates when a task reveals hidden risk, de-escalates when exploration shows the work is simpler than proposed.
 
 ## How a session flows
 
@@ -20,17 +22,18 @@ Claude proposes the tier; you confirm with one word (quick needs no confirmation
 
 **std** — Claude posts a mini-spec right in the chat:
 
-> Tier std — touches 2 files, needs tests. Mini-spec:
+> Tier std — clear design, one module. Mini-spec:
 > - **Goal:** reject empty emails on signup
 > - **Approach:** validate in `SignupForm.submit`, reuse `validators.ts`
-> - **Files:** `src/signup/form.ts`, `src/signup/form.test.ts`
+> - **Acceptance:** empty and whitespace-only input blocks submit and shows the field error; valid input is unaffected
 > - **Tests:** red repro for the bug, plus empty/whitespace cases
+> - **Files:** `src/signup/form.ts`, `src/signup/form.test.ts`
 >
 > OK?
 
 You say "ok", Claude implements, shows test output, done. One round-trip of overhead, total.
 
-**full** — Claude explores the codebase, asks clarifying questions (batched into one message, each with a proposed default), then writes a single feature doc and posts its path plus a 5-line summary. You approve once. Claude then works through the tasks in the main session — no implementer subagents — ticking checkboxes and appending progress lines as it goes. At the end: fresh full test-suite run, an optional one-shot review subagent, and a one-line handoff question (merge / PR / leave the branch).
+**full** — Claude explores the codebase, infers what it can and asks only the questions where a wrong guess is expensive (batched into one message, each with a proposed default), then writes a single feature doc and posts its path plus a 5-line summary. You approve once. Claude then works through the tasks in the main session — no implementer subagents — ticking checkboxes and appending progress lines as it goes. At the end: a fresh verification run, an optional one-shot review subagent, and a one-line handoff question (merge / PR / leave the branch).
 
 ## Artifacts
 
@@ -41,8 +44,8 @@ You say "ok", Claude implements, shows test output, done. One round-trip of over
 ```markdown
 # <Feature>
 
-## Spec        ← goal, non-goals, approach, interfaces, exact constraints
-## Tasks       ← checkboxes: files, deliverable, what test proves it
+## Spec        ← goal, non-goals, approach, interfaces, constraints, acceptance criteria
+## Tasks       ← checkboxes: files, deliverable, evidence that proves it
 ## Progress    ← append-only log: "Task 2: done (a1b2c3d)"
 ```
 
@@ -50,10 +53,11 @@ This one file replaces the spec doc + plan doc + ledger + briefs + reports of he
 
 ## The discipline that stays on (every tier)
 
-- **Verification before "done"** — no success claims without a fresh command run and its output. "Should work" is not a status.
-- **Red-first bugfixes** — a failing repro test before every fix, no exceptions.
-- **TDD-lite invariant** — every new test must be *seen failing* once: test-first, or a 30-second red-check (temporarily revert the change → test must fail → restore). Tests assert real behavior, never mocks. Skipping tests (config, glue, prototypes) is allowed but must be declared in one line.
-- **Root-cause debugging** — no guess-fixes; after 3 failed attempts, stop and question the approach.
+- **Verification before "done"** — no success claims without a fresh command run and its output, and a plain statement of what was and wasn't run. "Should work" is not a status.
+- **Reproduce-first bugfixes** — reproduce before fixing, with a failing repro test whenever practical. The automation is negotiable, the reproduction isn't.
+- **TDD-lite invariant** — a task isn't done until a test exists that would fail if the feature broke. For new code red comes for free. For *changes to existing behavior* — where a test can pass for the wrong reason — red must be seen: test-first, or a 30-second red-check (revert the key line → test must fail → restore). Mocks are fine at system boundaries; what doesn't count is a mock assertion standing in for the behavioral proof. Skipping tests (config, glue, prototypes) is allowed but must be declared in one line.
+- **Root-cause debugging** — no guess-fixes; after 3 failed attempts, stop editing and reassess the model of the problem instead of trying fix #4.
+- **No silent scope creep** — unrelated discoveries get parked, not fixed in passing.
 
 ## What it deliberately drops
 
