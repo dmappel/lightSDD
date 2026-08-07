@@ -7,6 +7,8 @@ description: Use when implementing lightSDD work (tier std or full) — executio
 
 All implementation happens inline in this session. No implementer subagents, no per-task reviewer dispatches.
 
+Work on a feature branch — if you're on the default branch, create one before the first commit. Completion offers merge/PR/leave; that choice only exists if the work isn't already on main.
+
 ## Loop (per task)
 
 1. Implement the task and its tests (together is fine).
@@ -16,6 +18,8 @@ All implementation happens inline in this session. No implementer subagents, no 
 5. Commit. Tier full: tick the task checkbox and append a Progress line: `Task N: done (<short-sha>)`.
 
 Don't pause between tasks for "should I continue?" — stop only when blocked or when a decision is genuinely the user's.
+
+**Unrelated discoveries** (a bug elsewhere, a tempting refactor) are parked, not fixed: one line in Progress (tier full) or one sentence to the user (tier std). Never fix silently mid-task — that's scope creep.
 
 ## TDD-lite
 
