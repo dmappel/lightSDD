@@ -4,8 +4,7 @@
     "name": "dmappel"
   },
   "metadata": {
-    "description": "lightSDD — lightweight spec-driven development for Claude Code",
-    "version": "0.1.0"
+    "description": "lightSDD — lightweight spec-driven development for Claude Code"
   },
   "plugins": [
     {
@@ -15,7 +14,6 @@
         "url": "https://github.com/dmappel/lightSDD.git"
       },
       "description": "Lightweight spec-driven development: quick/std/full tiers, inline execution, TDD-lite, one optional final review",
-      "version": "0.1.0",
       "strict": true
     }
   ]
