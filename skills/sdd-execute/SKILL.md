@@ -37,8 +37,10 @@ Don't pause between tasks for "should I continue?" — stop only when blocked or
 Root cause before fix — no guess-fixes:
 
 1. Read the actual error/stack completely; reproduce it reliably; check what changed recently (`git diff`, new deps).
-2. One hypothesis at a time, smallest change that tests it. Don't stack fixes.
-3. After **3 failed fix attempts**: stop editing and write out the reassessment — which assumption is still unverified? architecture, environment, a dependency, a recent change? Act on that instead of attempting fix #4. Go to the user only when the way forward needs a decision that's theirs (product, design, trade-off), not merely because the counter hit 3.
+2. **Minimize the reproduction** before touching the fix: strip the failing scenario down until removing anything else makes the bug disappear. Debugging the full scenario spends most hypotheses on noise.
+3. **Observe before hypothesizing** — log, dump, or break on the actual state. A hypothesis should come from something you saw, not from what the code looks like it does.
+4. One hypothesis at a time, smallest change that tests it. Don't stack fixes.
+5. After **3 failed fix attempts**: stop editing and write out the reassessment — which assumption is still unverified? architecture, environment, a dependency, a recent change? Act on that instead of attempting fix #4. Go to the user only when the way forward needs a decision that's theirs (product, design, trade-off), not merely because the counter hit 3.
 
 ## Recovery after compaction
 

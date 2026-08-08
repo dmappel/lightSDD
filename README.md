@@ -56,7 +56,7 @@ This one file replaces the spec doc + plan doc + ledger + briefs + reports of he
 - **Verification before "done"** — no success claims without a fresh command run and its output, and a plain statement of what was and wasn't run. "Should work" is not a status.
 - **Reproduce-first bugfixes** — reproduce before fixing, with a failing repro test whenever practical. The automation is negotiable, the reproduction isn't.
 - **TDD-lite invariant** — a task isn't done until a test exists that would fail if the feature broke. For new code red comes for free. For *changes to existing behavior* — where a test can pass for the wrong reason — red must be seen: test-first, or a 30-second red-check (revert the key line → test must fail → restore). Mocks are fine at system boundaries; what doesn't count is a mock assertion standing in for the behavioral proof. Skipping tests (config, glue, prototypes) is allowed but must be declared in one line.
-- **Root-cause debugging** — no guess-fixes; after 3 failed attempts, stop editing and reassess the model of the problem instead of trying fix #4.
+- **Root-cause debugging** — minimize the reproduction, observe the actual state before forming a hypothesis, no guess-fixes; after 3 failed attempts, stop editing and reassess the model of the problem instead of trying fix #4.
 - **No silent scope creep** — unrelated discoveries get parked, not fixed in passing.
 
 ## What it deliberately drops
