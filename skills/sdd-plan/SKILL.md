@@ -5,15 +5,15 @@ description: "Use for lightSDD tier full — write the single feature doc (spec 
 
 # lightSDD — Feature Doc
 
-One file per feature: `docs/sdd/YYYY-MM-DD-<feature>.md`. It is the spec, the plan, and the progress ledger at once — the single artifact that survives context compaction. No separate spec docs, plan docs, briefs, or reports.
+One file per feature: `docs/sdd/YYYY-MM-DD-<feature>.md` — spec, plan and progress ledger at once, the single artifact that survives compaction. No separate spec docs, plans, briefs or reports.
 
-It gets committed alongside the work; if this project shouldn't carry it, say so in one line and put it outside the repo or in `.gitignore` first — recovery only needs the path to be stable.
+It's committed with the work; if this project shouldn't carry it, say so and put it outside the repo or in `.gitignore` first — recovery only needs a stable path.
 
 ## Before writing
 
 - Explore the codebase first: relevant files, existing patterns, recent commits.
-- **Infer before asking:** investigate → infer → record it under Constraints as a stated assumption. Ask only where a wrong guess is expensive: it changes behavior, architecture, compatibility, or scope. Infer what the code can answer — goals, priorities and success criteria it can't, so those you ask.
-- Batch the questions that survive that filter into ONE message; for each, propose a default so the user can just say "yes". Batching is for *independent* questions — when an answer decides what to ask next, ask that one alone and wait, instead of shipping a batch that a single reply makes moot.
+- **Infer before asking:** investigate → infer → record it under Constraints as a stated assumption. Ask only where a wrong guess is expensive — it changes behavior, architecture, compatibility or scope. Infer what the code can answer; goals, priorities and success criteria it can't, so ask those.
+- Batch the survivors into ONE message, each with a proposed default so the user can just say "yes". Batching is for *independent* questions — when an answer decides what to ask next, ask that one alone and wait.
 - If genuinely competing approaches exist, present 2 options with trade-offs and a recommendation — one message, not a questionnaire.
 - YAGNI ruthlessly: cut every feature the goal doesn't require.
 
@@ -43,15 +43,15 @@ It gets committed alongside the work; if this project shouldn't carry it, say so
 ## Task granularity
 
 - A task = one independently verifiable deliverable, not a 2-minute step.
-- **Slice by feature, not by layer.** "The login flow, end to end" is a task; "the DB layer", "the API layer", "the UI" are not. A layer passes its unit tests while proving nothing works — you only find out at the end, when every layer has to land before anything can be exercised.
+- **Slice by feature, not by layer.** "The login flow, end to end" is a task; "the DB layer", "the API layer", "the UI" are not — a layer passes its unit tests while proving nothing works, and nothing can be exercised until every layer lands.
 - Name the files and the interfaces; do **not** inline full implementation code — code gets written once, in the repo.
 - Do include exact values (magic strings, endpoints, limits) and non-obvious decisions.
 - Order tasks so each builds on committed, verified work.
 
 ## Self-review (inline, no subagent)
 
-After writing, scan once: does every acceptance criterion have a task that delivers it and evidence that proves it? placeholders ("TBD", "handle errors properly")? contradictions between sections? names/signatures consistent across tasks? scope that crept in? Fix inline and move on.
+After writing, scan once: every acceptance criterion covered by a task, with evidence? placeholders ("TBD", "handle errors properly")? contradictions between sections? names/signatures consistent across tasks? scope that crept in? Fix inline and move on.
 
 ## Gate
 
-Post the doc path plus a ~5-line summary: goal, approach, major tasks, how it gets verified, notable risks. The user approves once. Then implement per `sdd-execute` — no further gates unless a new decision materially changes the approved spec.
+Post the doc path plus a ~5-line summary: goal, approach, major tasks, how it gets verified, notable risks. One approval, then implement per `sdd-execute` — no further gates unless a new decision materially changes the spec.
