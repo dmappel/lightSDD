@@ -12,7 +12,7 @@ It gets committed alongside the work; if this project shouldn't carry it, say so
 ## Before writing
 
 - Explore the codebase first: relevant files, existing patterns, recent commits.
-- **Infer before asking:** investigate → infer → record it under Constraints as a stated assumption. Ask only where a wrong guess is expensive: it changes behavior, architecture, compatibility, or scope.
+- **Infer before asking:** investigate → infer → record it under Constraints as a stated assumption. Ask only where a wrong guess is expensive: it changes behavior, architecture, compatibility, or scope. Infer what the code can answer — goals, priorities and success criteria it can't, so those you ask.
 - Batch the questions that survive that filter into ONE message; for each, propose a default so the user can just say "yes".
 - If genuinely competing approaches exist, present 2 options with trade-offs and a recommendation — one message, not a questionnaire.
 - YAGNI ruthlessly: cut every feature the goal doesn't require.

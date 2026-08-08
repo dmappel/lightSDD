@@ -19,6 +19,8 @@ Process depth is proportional to the *risk* of the task, not its size. Propose a
 
 A tier the user names (`/sdd full`) wins. Otherwise weigh design uncertainty, blast radius, reversibility, contracts, security/concurrency risk. **File count is a weak signal** — one auth change can be `full`, five config edits `quick`.
 
+**If it isn't a task yet** — an open problem, not a change ("thinking about realtime collab, not sure how") — don't assign a tier. Talk it through first: no artifact, no gate. Propose a tier once the shape of the solution is agreed.
+
 - Propose in one line: *"Tier std — design clear, blast radius one module. Mini-spec below, OK?"*
 - **quick** needs no confirmation — announce and proceed.
 - **std/full** wait for one confirmation, bundled with the mini-spec/doc summary so approval is a single round-trip.

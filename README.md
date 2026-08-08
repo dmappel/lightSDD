@@ -64,6 +64,7 @@ This one file replaces the spec doc + plan doc + ledger + briefs + reports of he
 - Per-task implementer/reviewer/re-review subagent loops (15–20 dispatches per plan in heavyweight setups) → all implementation is inline; **one** optional final-review subagent at the end (tier full or on request).
 - Plans that duplicate the full implementation code in markdown → tasks name files, interfaces, and exact values; code is written once, in the repo.
 - Mandatory design ceremony for trivial changes → tiers.
+- A separate brainstorming skill and a fixed `brainstorm → plan → execute` pipeline → design discussion lives inside tier full's planning step, where it's actually needed; when a request isn't a task yet, Claude talks it through with no tier and no artifact.
 - Session-start hooks and "invoke a skill before ANY response" gating → skills load lazily, when actually relevant.
 
 ## Install
