@@ -92,3 +92,5 @@ hooks/
   session-start  injects the one rule that routes a change conversation
                  into `sdd` before code — the rest stays lazy
 ```
+
+The hook is a bash script (`"shell": "bash"`), so on Windows it needs Git for Windows; without it Claude Code reports the missing shell and skips the injection. Everything else — all three skills, all three tiers — works regardless: the hook only makes the routing deterministic instead of leaving it to description matching.
