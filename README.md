@@ -65,7 +65,7 @@ This one file replaces the spec doc + plan doc + ledger + briefs + reports of he
 - Plans that duplicate the full implementation code in markdown → tasks name files, interfaces, and exact values; code is written once, in the repo.
 - Mandatory design ceremony for trivial changes → tiers.
 - A separate brainstorming skill and a fixed `brainstorm → plan → execute` pipeline → design discussion lives inside tier full's planning step, where it's actually needed; when a request isn't a task yet, Claude talks it through with no tier and no artifact.
-- Session-start hooks and "invoke a skill before ANY response" gating → skills load lazily, when actually relevant.
+- "Invoke a skill before ANY response" gating, and injecting whole skill bodies into every session → one session-start hook injects a single routing rule (six lines) pointing at the `sdd` router; every other skill still loads lazily, when actually relevant.
 
 ## Install
 
@@ -76,7 +76,7 @@ This one file replaces the spec doc + plan doc + ledger + briefs + reports of he
 
 ## Use
 
-- `/sdd` (or just start a coding task — the router skill picks it up): proposes a tier and proceeds.
+- `/sdd` (or just start talking about a change — the router is picked up while planning, not at the first line of code): proposes a tier and proceeds.
 - `/sdd full` / `/sdd std` / `/sdd quick`: force a tier.
 - Ask for a review anytime — the final-review subagent isn't tied to a tier.
 
@@ -88,4 +88,7 @@ skills/
   sdd-plan/      tier full: the single feature-doc format
   sdd-execute/   execution loop, TDD-lite, debugging, completion
                  + reviewer.md (optional final-review subagent prompt)
+hooks/
+  session-start  injects the one rule that routes a change conversation
+                 into `sdd` before code — the rest stays lazy
 ```

@@ -1,6 +1,6 @@
 ---
 name: sdd
-description: "Use when starting any development task (feature, bugfix, refactor) — pick the right process depth (quick/std/full) for lightweight spec-driven development. Trigger: /sdd or beginning of coding work."
+description: "Use as soon as a conversation turns to changing a codebase — building a feature, fixing a bug, refactoring — including while still only discussing, scoping, planning, or deciding what should be done, and even when the user says \"we're just talking\" or \"don't write code yet\". Picks the process depth (quick/std/full) for lightweight spec-driven development. Triggers: /sdd; \"what should we do here\", \"what's the plan\", \"let's scope this\", \"write a spec / design doc\"; analyzing a repo, transcript or ticket to work out what to build next; agreeing a plan in chat; the first edit of any feature, bugfix or refactor. Load it at the START of that conversation, not at the first line of code."
 ---
 
 # lightSDD — Router
@@ -20,6 +20,8 @@ Process depth is proportional to the *risk* of the task, not its size. Propose a
 A tier the user names (`/sdd full`) wins. Otherwise weigh design uncertainty, blast radius, reversibility, contracts, security/concurrency risk. **File count is a weak signal** — one auth change can be `full`, five config edits `quick`.
 
 **Not a task yet?** An open problem rather than a change ("thinking about realtime collab, not sure how") gets no tier: talk it through, no artifact and no gate, and propose a tier once the shape is agreed.
+
+**Arriving mid-discussion?** A plan already hammered out in chat still gets a tier and its spec **before** the first edit — a doc written after the code isn't a spec, it's a report.
 
 - Propose in one line: *"Tier std — design clear, blast radius one module. Mini-spec below, OK?"*
 - **quick** needs no confirmation — announce and proceed.

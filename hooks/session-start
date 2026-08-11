@@ -1,0 +1,23 @@
+#!/usr/bin/env bash
+# SessionStart hook for lightSDD.
+#
+# Description matching alone fires too late: it anchors on "starting to write
+# code", while the router is needed one step earlier — when the conversation
+# first turns to what to change. This injects that one routing rule, and only
+# that. No skill bodies, no per-response gating.
+#
+# printf with %s (not a heredoc, not the format string) so the literal \n and \"
+# in $CONTEXT reach the JSON unexpanded.
+
+set -euo pipefail
+
+CONTEXT='<IMPORTANT>\n'
+CONTEXT+='lightSDD is installed.\n\n'
+CONTEXT+='Invoke the `lightsdd:sdd` skill BEFORE responding to anything about changing this codebase — a feature, a bugfix, a refactor. '
+CONTEXT+='That includes the stage before code: discussing, scoping, planning, or reading code, tickets and transcripts to work out what should be built. '
+CONTEXT+='It holds even when the user says \"we are just talking\" or \"do not write code yet\", and it comes before clarifying questions or exploring the repo.\n\n'
+CONTEXT+='Not reasons to skip it: \"let me analyze the repo first\", \"I need more context first\", \"this is not a task yet\", \"this is only a discussion\".\n\n'
+CONTEXT+='Invoking early is cheap and commits to nothing: the skill picks a tier, and \"no tier — keep talking\" is one of its valid outcomes.\n'
+CONTEXT+='</IMPORTANT>'
+
+printf '{"hookSpecificOutput":{"hookEventName":"SessionStart","additionalContext":"%s"}}\n' "$CONTEXT"
