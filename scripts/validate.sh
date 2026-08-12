@@ -40,7 +40,10 @@ if sys.argv[2] not in frontmatter:
 assert_contains "$ROOT/skills/sdd/SKILL.md" "## Scope boundary"
 assert_contains "$ROOT/skills/sdd/SKILL.md" "## User-facing communication"
 assert_frontmatter_contains "$ROOT/skills/sdd/SKILL.md" "Do not use for non-software artifacts"
+assert_contains "$ROOT/skills/sdd-plan/SKILL.md" "External capabilities"
+assert_contains "$ROOT/skills/sdd-plan/SKILL.md" "verification limit"
 assert_contains "$ROOT/README.md" "## User-facing communication"
+assert_contains "$ROOT/README.md" "Capability-aware planning"
 
 bash "$ROOT/hooks/session-start" | python3 -c '
 import json

@@ -61,6 +61,8 @@ For example, an offer review should begin like this:
 
 This one file replaces the spec doc + plan doc + ledger + briefs + reports of heavyweight setups. It doubles as the recovery point: after context compaction or in a new session, the agent re-reads the checkboxes, the Progress log, and `git log` — and resumes at the first unfinished task instead of redoing completed work.
 
+**Capability-aware planning:** when a full plan depends on external access such as an authenticated browser, API/MCP, database, deployment environment or specialist hardware, it records that dependency under Constraints. If the capability is unavailable, the plan states the fallback and what cannot be verified instead of promising impossible proof.
+
 ## The discipline that stays on (every tier)
 
 - **Verification before "done"** — no success claims without a fresh command run and its output, and a plain statement of what was and wasn't run. "Should work" is not a status.
