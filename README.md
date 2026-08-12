@@ -14,15 +14,15 @@ Lightweight spec-driven development for Codex and Claude Code. A minimal alterna
 
 Tier follows design uncertainty, blast radius, reversibility and risk; file count is only a weak signal — one auth change can be `full`, five config edits can be `quick`.
 
-The coding agent proposes the tier; you confirm with one word (quick needs no confirmation). Mid-flight it moves either way: escalates when a task reveals hidden risk, de-escalates when exploration shows the work is simpler than proposed.
+The coding agent selects the tier internally; you confirm with one word when a plan is required (quick needs no confirmation). Mid-flight it moves either way: escalates when a task reveals hidden risk, de-escalates when exploration shows the work is simpler than proposed.
 
 ## How a session flows
 
-**quick** — the agent announces "tier quick", makes the change, runs the command that proves it works, shows the output. That's it.
+**quick** — the agent makes the change, runs the command that proves it works, and shows the result. That's it.
 
 **std** — the agent posts a mini-spec right in the chat:
 
-> Tier std — clear design, one module. Mini-spec:
+> This is a contained change. Short plan:
 > - **Goal:** reject empty emails on signup
 > - **Approach:** validate in `SignupForm.submit`, reuse `validators.ts`
 > - **Acceptance:** empty and whitespace-only input blocks submit and shows the field error; valid input is unaffected
@@ -34,6 +34,16 @@ The coding agent proposes the tier; you confirm with one word (quick needs no co
 You say "ok", the agent implements, shows test output, done. One round-trip of overhead, total.
 
 **full** — the agent explores the codebase, infers what it can and asks only the questions where a wrong guess is expensive (batched into one message, each with a proposed default), then writes a single feature doc and posts its path plus a 5-line summary. You approve once. The agent then works through the tasks in the main session — no implementer subagents — ticking checkboxes and appending progress lines as it goes. At the end: a fresh verification run, an optional one-shot review subagent, and a one-line handoff question (merge / PR / leave the branch).
+
+## User-facing communication
+
+lightSDD keeps its orchestration in the background. Routine updates say what the agent is doing, why, and what result comes next; they do not list loaded skills, tool calls, or an agent roster. Tier names appear only when you explicitly invoke lightSDD or ask about its process.
+
+The repository context alone does not activate lightSDD. Reviewing an offer, resume, article, presentation, spreadsheet, or general research stays outside the workflow unless that material is being used to decide what software change to build.
+
+For example, an offer review should begin like this:
+
+> I'll review the offer's claims and assumptions, then return a revised version. I won't change disputed points until you confirm them.
 
 ## Artifacts
 
