@@ -4,7 +4,7 @@ Dispatch ONE general-purpose subagent with this prompt (fill the placeholders). 
 
 ---
 
-Review a completed feature branch against its spec. You have no prior context — everything you need is below.
+Review completed work against its spec. You have no prior context — everything you need is below.
 
 **Feature doc (spec + task list):** read `{FEATURE_DOC_PATH}` first.
 **Diff under review:** run `git diff {BASE_SHA}..{HEAD_SHA}` (and `git log --oneline {BASE_SHA}..{HEAD_SHA}`).

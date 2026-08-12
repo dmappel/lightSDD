@@ -1,6 +1,6 @@
 {
   "name": "lightsdd",
-  "description": "Lightweight spec-driven development for Claude Code: process depth proportional to the task (quick/std/full tiers), inline execution, TDD-lite, one optional final review. A minimal alternative to heavyweight SDD frameworks.",
+  "description": "Lightweight spec-driven development for Claude Code and Codex: process depth proportional to the task (quick/std/full tiers), inline execution, TDD-lite, one optional final review. A minimal alternative to heavyweight SDD frameworks.",
   "author": {
     "name": "dmappel"
   },

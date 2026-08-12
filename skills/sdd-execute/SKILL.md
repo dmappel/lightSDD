@@ -7,7 +7,9 @@ description: "Use when implementing lightSDD work (tier std or full) — executi
 
 All implementation happens inline in this session. No implementer subagents, no per-task reviewer dispatches.
 
-Work on a feature branch — on the default branch, create one before the first commit. Required for full, the same default for std unless the user says otherwise; it's also what makes the merge/PR/leave choice at completion exist.
+Work on a feature branch when the environment supports it — on the default branch, create one before the first commit. Required for full, the same default for std unless the user says otherwise.
+
+**Managed workspaces:** first compare `git rev-parse --git-dir` with `git rev-parse --git-common-dir`. If they differ, the session is already in a linked worktree (including a Codex App-managed worktree). Do not create or switch branches there. Work in the provided workspace, whether its HEAD is named or detached, and let the host handle integration. If branch creation fails because the host sandbox blocks it, continue in the current workspace and report that constraint; do not retry with elevated permissions.
 
 ## Loop (per task)
 
@@ -50,4 +52,4 @@ Re-read the feature doc (checkboxes + Progress) and `git log`. Tasks marked done
 
 1. **Fresh verification run** — in this turn, never a claim carried over. The relevant suite plus what the change needs (lint, typecheck, build, a runtime check); the **full** repo suite when the tier is full, when the change can reach unrelated areas, or when it's cheap. Then state what you ran and what you didn't.
 2. **Optional final review** — for tier full, security/data/concurrency/migration changes, or on request: dispatch ONE reviewer subagent per [reviewer.md](reviewer.md) with the feature doc path and the diff range (merge-base..HEAD). Fix Critical/Important findings (push back with reasoning if one is wrong), list Minor ones for the user. One review, one fix pass, one re-check — no loops.
-3. **Hand off:** report what was built, which acceptance criteria it satisfies, and the fresh verification evidence. Then ask in one line: merge / push + PR / leave the branch. The integration decision is the user's.
+3. **Hand off:** report what was built, which acceptance criteria it satisfies, and the fresh verification evidence. On a normal feature branch, ask in one line: merge / push + PR / leave the branch. In a host-managed or detached worktree, hand control back to the host instead of offering branch operations that may not exist.

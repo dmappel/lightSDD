@@ -1,0 +1,28 @@
+{
+  "name": "lightsdd",
+  "version": "0.1.0",
+  "description": "Lightweight spec-driven development for Codex and Claude Code: risk-based quick, std, and full workflows with TDD-lite verification.",
+  "author": {
+    "name": "dmappel",
+    "url": "https://github.com/dmappel"
+  },
+  "homepage": "https://github.com/dmappel/lightSDD",
+  "repository": "https://github.com/dmappel/lightSDD",
+  "license": "MIT",
+  "keywords": ["sdd", "spec-driven-development", "workflow", "tdd", "planning", "lightweight"],
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "lightSDD",
+    "shortDescription": "Lightweight, risk-based spec-driven development",
+    "longDescription": "Choose quick, standard, or full spec-driven development based on risk, then implement inline with TDD-lite and fresh verification.",
+    "developerName": "dmappel",
+    "category": "Developer Tools",
+    "capabilities": ["Planning", "Code"],
+    "websiteURL": "https://github.com/dmappel/lightSDD",
+    "defaultPrompt": [
+      "Use lightSDD to plan and implement this change.",
+      "Choose the lightSDD tier for this bugfix.",
+      "Create a full lightSDD feature plan."
+    ]
+  }
+}

@@ -1,6 +1,6 @@
 # lightSDD
 
-Lightweight spec-driven development for Claude Code. A minimal alternative to heavyweight SDD frameworks (like [superpowers](https://github.com/obra/superpowers)): keeps the discipline that makes agent-written code trustworthy, drops the ceremony and the subagent token burn.
+Lightweight spec-driven development for Codex and Claude Code. A minimal alternative to heavyweight SDD frameworks (like [superpowers](https://github.com/obra/superpowers)): keeps the discipline that makes agent-written code trustworthy, drops the ceremony and the subagent token burn.
 
 ## Core idea
 
@@ -14,13 +14,13 @@ Lightweight spec-driven development for Claude Code. A minimal alternative to he
 
 Tier follows design uncertainty, blast radius, reversibility and risk; file count is only a weak signal — one auth change can be `full`, five config edits can be `quick`.
 
-Claude proposes the tier; you confirm with one word (quick needs no confirmation). Mid-flight it moves either way: escalates when a task reveals hidden risk, de-escalates when exploration shows the work is simpler than proposed.
+The coding agent proposes the tier; you confirm with one word (quick needs no confirmation). Mid-flight it moves either way: escalates when a task reveals hidden risk, de-escalates when exploration shows the work is simpler than proposed.
 
 ## How a session flows
 
-**quick** — Claude announces "tier quick", makes the change, runs the command that proves it works, shows the output. That's it.
+**quick** — the agent announces "tier quick", makes the change, runs the command that proves it works, shows the output. That's it.
 
-**std** — Claude posts a mini-spec right in the chat:
+**std** — the agent posts a mini-spec right in the chat:
 
 > Tier std — clear design, one module. Mini-spec:
 > - **Goal:** reject empty emails on signup
@@ -31,9 +31,9 @@ Claude proposes the tier; you confirm with one word (quick needs no confirmation
 >
 > OK?
 
-You say "ok", Claude implements, shows test output, done. One round-trip of overhead, total.
+You say "ok", the agent implements, shows test output, done. One round-trip of overhead, total.
 
-**full** — Claude explores the codebase, infers what it can and asks only the questions where a wrong guess is expensive (batched into one message, each with a proposed default), then writes a single feature doc and posts its path plus a 5-line summary. You approve once. Claude then works through the tasks in the main session — no implementer subagents — ticking checkboxes and appending progress lines as it goes. At the end: a fresh verification run, an optional one-shot review subagent, and a one-line handoff question (merge / PR / leave the branch).
+**full** — the agent explores the codebase, infers what it can and asks only the questions where a wrong guess is expensive (batched into one message, each with a proposed default), then writes a single feature doc and posts its path plus a 5-line summary. You approve once. The agent then works through the tasks in the main session — no implementer subagents — ticking checkboxes and appending progress lines as it goes. At the end: a fresh verification run, an optional one-shot review subagent, and a one-line handoff question (merge / PR / leave the branch).
 
 ## Artifacts
 
@@ -49,7 +49,7 @@ You say "ok", Claude implements, shows test output, done. One round-trip of over
 ## Progress    ← append-only log: "Task 2: done (a1b2c3d)"
 ```
 
-This one file replaces the spec doc + plan doc + ledger + briefs + reports of heavyweight setups. It doubles as the recovery point: after context compaction or in a new session, Claude re-reads the checkboxes, the Progress log, and `git log` — and resumes at the first unfinished task instead of redoing completed work.
+This one file replaces the spec doc + plan doc + ledger + briefs + reports of heavyweight setups. It doubles as the recovery point: after context compaction or in a new session, the agent re-reads the checkboxes, the Progress log, and `git log` — and resumes at the first unfinished task instead of redoing completed work.
 
 ## The discipline that stays on (every tier)
 
@@ -64,20 +64,36 @@ This one file replaces the spec doc + plan doc + ledger + briefs + reports of he
 - Per-task implementer/reviewer/re-review subagent loops (15–20 dispatches per plan in heavyweight setups) → all implementation is inline; **one** optional final-review subagent at the end (tier full or on request).
 - Plans that duplicate the full implementation code in markdown → tasks name files, interfaces, and exact values; code is written once, in the repo.
 - Mandatory design ceremony for trivial changes → tiers.
-- A separate brainstorming skill and a fixed `brainstorm → plan → execute` pipeline → design discussion lives inside tier full's planning step, where it's actually needed; when a request isn't a task yet, Claude talks it through with no tier and no artifact.
-- "Invoke a skill before ANY response" gating, and injecting whole skill bodies into every session → one session-start hook injects a single routing rule (six lines) pointing at the `sdd` router; every other skill still loads lazily, when actually relevant.
+- A separate brainstorming skill and a fixed `brainstorm → plan → execute` pipeline → design discussion lives inside tier full's planning step, where it's actually needed; when a request isn't a task yet, the agent talks it through with no tier and no artifact.
+- "Invoke a skill before ANY response" gating, and injecting whole skill bodies into every session → Claude's session-start hook injects a single routing rule (six lines) pointing at the `sdd` router; every other skill still loads lazily, when actually relevant.
 
 ## Install
 
+### Codex
+
+Add this repository as a plugin marketplace, then install lightSDD:
+
+```bash
+codex plugin marketplace add dmappel/lightSDD
+codex plugin add lightsdd@lightsdd-marketplace
 ```
+
+Start a new Codex thread after installation so the skills are loaded. Codex discovers the router from its skill description; the Claude-specific session hook is not used.
+
+For local development, replace `dmappel/lightSDD` with the path to your checkout. Re-run `codex plugin add lightsdd@lightsdd-marketplace` after changing the plugin, then start a new thread.
+
+### Claude Code
+
+```text
 /plugin marketplace add dmappel/lightSDD
 /plugin install lightsdd
 ```
 
 ## Use
 
-- `/sdd` (or just start talking about a change — the router is picked up while planning, not at the first line of code): proposes a tier and proceeds.
-- `/sdd full` / `/sdd std` / `/sdd quick`: force a tier.
+- Just start talking about a change: the router is picked up while planning, not at the first line of code.
+- Claude Code: `/sdd`, or `/sdd full` / `/sdd std` / `/sdd quick` to force a tier.
+- Codex: `$lightsdd:sdd`, or ask it to use lightSDD with the full, std, or quick tier.
 - Ask for a review anytime — the final-review subagent isn't tied to a tier.
 
 ## Structure
@@ -89,8 +105,22 @@ skills/
   sdd-execute/   execution loop, TDD-lite, debugging, completion
                  + reviewer.md (optional final-review subagent prompt)
 hooks/
-  session-start  injects the one rule that routes a change conversation
-                 into `sdd` before code — the rest stays lazy
+  session-start  Claude Code only: injects the one rule that routes a change
+                 conversation into `sdd` before code — the rest stays lazy
+.codex-plugin/
+  plugin.json    Codex plugin manifest; loads the same skills/ directory
+.agents/plugins/
+  marketplace.json  Codex marketplace entry for repository installation
+scripts/
+  validate.sh    validates both plugin manifests, all skills, JSON, and the hook
 ```
 
-The hook is a bash script (`"shell": "bash"`), so on Windows it needs Git for Windows; without it Claude Code reports the missing shell and skips the injection. Everything else — all three skills, all three tiers — works regardless: the hook only makes the routing deterministic instead of leaving it to description matching.
+The hook is a Claude Code-only bash script (`"shell": "bash"`), so on Windows it needs Git for Windows; without it Claude Code reports the missing shell and skips the injection. Codex does not use this hook. Everything else — all three skills, all three tiers — is shared: the hook only makes Claude's routing deterministic instead of leaving it to description matching.
+
+## Validate
+
+```bash
+./scripts/validate.sh
+```
+
+The validator performs an isolated Codex marketplace installation and, when the Claude CLI is available, validates the Claude marketplace too. It does not modify your normal Codex configuration.

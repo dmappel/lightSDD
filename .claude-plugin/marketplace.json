@@ -4,7 +4,7 @@
     "name": "dmappel"
   },
   "metadata": {
-    "description": "lightSDD — lightweight spec-driven development for Claude Code"
+    "description": "lightSDD — lightweight spec-driven development for Claude Code and Codex"
   },
   "plugins": [
     {
